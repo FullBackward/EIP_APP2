@@ -4,25 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bluetooth Alarm Scheduler</title>
-  <!-- Bootstrap CSS -->
+  <!-- Bootswatch Flatly Theme (Bootstrap) -->
   <link 
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
+    href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/flatly/bootstrap.min.css" 
     rel="stylesheet"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" 
-    crossorigin="anonymous" 
   />
+  <!-- Custom Theme CSS -->
   <style>
-    /* Utility to hide sections */
-    .hidden { display: none; }
+    /* Custom background and container styling */
+    body {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 700px;
+      margin-top: 50px;
+      padding: 30px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      font-weight: 300;
+      margin-bottom: 30px;
+    }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <div class="container mt-5">
+  <div class="container">
     <!-- Connection/Login Page -->
     <div id="connectionPage">
       <h2>Bluetooth Connection</h2>
       <p>Click the button below to connect to your Bluetooth device.</p>
-      <button id="connectButton" class="btn btn-primary">Connect</button>
+      <button id="connectButton" class="btn btn-primary btn-lg">Connect</button>
       <p id="connectionStatus" class="mt-3 text-info"></p>
     </div>
 
