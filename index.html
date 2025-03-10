@@ -76,6 +76,7 @@
   </script>
 
   <script>
+    const device = none;
     // Simulated Bluetooth connection using the Web Bluetooth API
     async function connectBluetooth() {
       try {
@@ -83,7 +84,7 @@
           // For demo purposes; in production you may want to filter by services.
           acceptAllDevices: true
         };
-        const device = await navigator.bluetooth.requestDevice(options);
+        device = await navigator.bluetooth.requestDevice(options);
         document.getElementById('connectionStatus').textContent = 'Connected to ' + (device.name || 'Unknown Device');
         // Switch to scheduler page after connection
         document.getElementById('connectionPage').classList.add('hidden');
