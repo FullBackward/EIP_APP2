@@ -1,19 +1,24 @@
 <!-- Scheduler Page -->
 <div id="schedulerPage" class="hidden">
-    <h2>Alarm Scheduler</h2>
-    <p>Set multiple alarms:</p>
-    <form id="alarmForm" class="form-inline mb-4">
-      <div class="form-group mb-2">
-        <label for="alarmTime" class="sr-only">Alarm Time</label>
-        <input type="time" id="alarmTime" class="form-control" placeholder="Time" required>
+  <h2>Alarm Scheduler</h2>
+  <p class="text-muted mb-4">Set multiple alarms for your smart mattress.</p>
+
+  <form id="alarmForm" class="mb-4">
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <label class="sr-only" for="alarmTime">Alarm Time</label>
+        <input type="time" id="alarmTime" class="form-control mb-2" required>
       </div>
-      <div class="form-group mx-sm-3 mb-2">
-        <label for="alarmLabel" class="sr-only">Label</label>
-        <input type="text" id="alarmLabel" class="form-control" placeholder="Alarm Label">
+      <div class="col-auto">
+        <label class="sr-only" for="alarmLabel">Label</label>
+        <input type="text" id="alarmLabel" class="form-control mb-2" placeholder="Alarm Label">
       </div>
-      <button type="submit" class="btn btn-success mb-2">Add Alarm</button>
-    </form>
-    <h3>Scheduled Alarms</h3>
-    <ul id="alarmList" class="list-group"></ul>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-success mb-2">Add Alarm</button>
+      </div>
+    </div>
+  </form>
+
+  <h4 class="mb-3">Scheduled Alarms</h4>
+  <ul id="alarmList" class="list-group"></ul>
 </div>
-  
