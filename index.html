@@ -4,63 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bluetooth Alarm Scheduler</title>
+
   <!-- Bootswatch Flatly Theme (Bootstrap) -->
   <link 
     href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/flatly/bootstrap.min.css" 
     rel="stylesheet"
   />
+
   <!-- Custom Theme CSS -->
-  <style>
-    /* Custom background and container styling */
-    body {
-      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-      min-height: 100vh;
-    }
-    .container {
-      max-width: 700px;
-      margin-top: 50px;
-      padding: 30px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    h2 {
-      font-weight: 300;
-      margin-bottom: 30px;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
+
 </head>
 <body>
   <div class="container">
     <!-- Connection/Login Page -->
-    <div id="connectionPage">
-      <h2>Bluetooth Connection</h2>
-      <p>Click the button below to connect to your Bluetooth device.</p>
-      <button id="connectButton" class="btn btn-primary btn-lg">Connect</button>
-      <p id="connectionStatus" class="mt-3 text-info"></p>
-    </div>
-
-    <!-- Scheduler Page -->
-    <div id="schedulerPage" class="hidden">
-      <h2>Alarm Scheduler</h2>
-      <p>Set multiple alarms:</p>
-      <form id="alarmForm" class="form-inline mb-4">
-        <div class="form-group mb-2">
-          <label for="alarmTime" class="sr-only">Alarm Time</label>
-          <input type="time" id="alarmTime" class="form-control" placeholder="Time" required>
-        </div>
-        <div class="form-group mx-sm-3 mb-2">
-          <label for="alarmLabel" class="sr-only">Label</label>
-          <input type="text" id="alarmLabel" class="form-control" placeholder="Alarm Label">
-        </div>
-        <button type="submit" class="btn btn-success mb-2">Add Alarm</button>
-      </form>
-      <h3>Scheduled Alarms</h3>
-      <ul id="alarmList" class="list-group"></ul>
-    </div>
+    <div id="connectionPageContainer"></div>
+    <div id="schedulerPageContainer"></div>
   </div>
 
   <!-- Bootstrap JS and dependencies -->
@@ -75,123 +35,10 @@
     crossorigin="anonymous">
   </script>
 
-  <script>
-    // Global variables to store the connected device's characteristic.
-    let bluetoothCharacteristic = null;
-
-    // Function to connect to a Bluetooth device and get a specific service & characteristic.
-    async function connectBluetooth() {
-      try {
-        const options = {
-          // Request all devices; update filters if needed.
-          acceptAllDevices: true,
-          // Add your custom service UUID here so that it is available after connection.
-          optionalServices: ['00001234-0000-1000-8000-00805f9b34fb']
-        };
-        const device = await navigator.bluetooth.requestDevice(options);
-        const server = await device.gatt.connect();
-
-        // Replace these UUIDs with the ones matching your Bluetooth device.
-        const service = await server.getPrimaryService('00001234-0000-1000-8000-00805f9b34fb');
-        bluetoothCharacteristic = await service.getCharacteristic('00005678-0000-1000-8000-00805f9b34fb');
-        
-        document.getElementById('connectionStatus').textContent = 'Connected to ' + (device.name || 'Unknown Device');
-        // Switch to scheduler page after successful connection
-        document.getElementById('connectionPage').classList.add('hidden');
-        document.getElementById('schedulerPage').classList.remove('hidden');
-      } catch (error) {
-        document.getElementById('connectionStatus').textContent = 'Connection failed: ' + error;
-        console.error(error);
-      }
-    }
-
-    // Bind connection button click event
-    document.getElementById('connectButton').addEventListener('click', connectBluetooth);
-
-    // Function to send alarm data to the connected Bluetooth device.
-    function sendAlarmData(alarmEntry) {
-      if (!bluetoothCharacteristic) {
-        console.error("No Bluetooth characteristic available. Alarm not sent.");
-        return;
-      }
-      const encoder = new TextEncoder();
-      const data = encoder.encode(JSON.stringify(alarmEntry));
-      bluetoothCharacteristic.writeValue(data)
-        .then(() => console.log("Alarm data sent:", alarmEntry))
-        .catch(error => console.error("Error sending alarm data:", error));
-    }
-
-    // Alarm Scheduler Logic
-    const alarms = [];
-
-    document.getElementById('alarmForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      
-      const alarmTimeInput = document.getElementById('alarmTime').value;
-      const alarmLabelInput = document.getElementById('alarmLabel').value || "Alarm";
-      
-      if (!alarmTimeInput) {
-        alert('Please select a time for the alarm.');
-        return;
-      }
-      
-      const now = new Date();
-      let alarmTime = new Date();
-      const [hours, minutes] = alarmTimeInput.split(':');
-      alarmTime.setHours(hours, minutes, 0, 0);
-      
-      // If the alarm time has already passed today, schedule for the next day
-      if (alarmTime <= now) {
-        alarmTime.setDate(alarmTime.getDate() + 1);
-      }
-      
-      const timeout = alarmTime - now;
-      
-      // Schedule the alarm with setTimeout
-      const alarmId = setTimeout(function() {
-        alert('Alarm: ' + alarmLabelInput + ' is ringing!');
-      }, timeout);
-      
-      // Save the alarm details
-      const alarmEntry = {
-        time: alarmTime.toLocaleTimeString(),
-        label: alarmLabelInput,
-        id: alarmId
-      };
-      
-      alarms.push(alarmEntry);
-      updateAlarmList();
-
-      // Send the alarm data to the connected Bluetooth device
-      sendAlarmData(alarmEntry);
-      
-      // Clear input fields for new alarm entry
-      document.getElementById('alarmTime').value = '';
-      document.getElementById('alarmLabel').value = '';
-    });
-
-    // Update the displayed list of scheduled alarms
-    function updateAlarmList() {
-      const alarmList = document.getElementById('alarmList');
-      alarmList.innerHTML = '';
-      alarms.forEach((alarm, index) => {
-        const li = document.createElement('li');
-        li.className = 'list-group-item d-flex justify-content-between align-items-center';
-        li.textContent = alarm.label + ' at ' + alarm.time;
-        
-        const deleteButton = document.createElement('button');
-        deleteButton.className = 'btn btn-danger btn-sm';
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = function() {
-          clearTimeout(alarm.id);
-          alarms.splice(index, 1);
-          updateAlarmList();
-        };
-        
-        li.appendChild(deleteButton);
-        alarmList.appendChild(li);
-      });
-    }
-  </script>
+  <!-- Custom JS Modules -->
+  <script src="js/ui.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/bluetooth.js"></script>
+  <script src="js/scheduler.js"></script>
 </body>
 </html>

@@ -1,0 +1,19 @@
+body {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 700px;
+    margin-top: 50px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  h2 {
+    font-weight: 300;
+    margin-bottom: 30px;
+  }
+  .hidden {
+    display: none;
+  }
