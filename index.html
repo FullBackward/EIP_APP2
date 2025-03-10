@@ -76,26 +76,50 @@
   </script>
 
   <script>
-    const device = none;
-    // Simulated Bluetooth connection using the Web Bluetooth API
+    // Global variables to store the connected device's characteristic.
+    let bluetoothCharacteristic = null;
+
+    // Function to connect to a Bluetooth device and get a specific service & characteristic.
     async function connectBluetooth() {
       try {
         const options = {
-          // For demo purposes; in production you may want to filter by services.
-          acceptAllDevices: true
+          // Request all devices; update filters if needed.
+          acceptAllDevices: true,
+          // Add your custom service UUID here so that it is available after connection.
+          optionalServices: ['00001234-0000-1000-8000-00805f9b34fb']
         };
-        device = await navigator.bluetooth.requestDevice(options);
+        const device = await navigator.bluetooth.requestDevice(options);
+        const server = await device.gatt.connect();
+
+        // Replace these UUIDs with the ones matching your Bluetooth device.
+        const service = await server.getPrimaryService('00001234-0000-1000-8000-00805f9b34fb');
+        bluetoothCharacteristic = await service.getCharacteristic('00005678-0000-1000-8000-00805f9b34fb');
+        
         document.getElementById('connectionStatus').textContent = 'Connected to ' + (device.name || 'Unknown Device');
-        // Switch to scheduler page after connection
+        // Switch to scheduler page after successful connection
         document.getElementById('connectionPage').classList.add('hidden');
         document.getElementById('schedulerPage').classList.remove('hidden');
       } catch (error) {
         document.getElementById('connectionStatus').textContent = 'Connection failed: ' + error;
+        console.error(error);
       }
     }
 
     // Bind connection button click event
     document.getElementById('connectButton').addEventListener('click', connectBluetooth);
+
+    // Function to send alarm data to the connected Bluetooth device.
+    function sendAlarmData(alarmEntry) {
+      if (!bluetoothCharacteristic) {
+        console.error("No Bluetooth characteristic available. Alarm not sent.");
+        return;
+      }
+      const encoder = new TextEncoder();
+      const data = encoder.encode(JSON.stringify(alarmEntry));
+      bluetoothCharacteristic.writeValue(data)
+        .then(() => console.log("Alarm data sent:", alarmEntry))
+        .catch(error => console.error("Error sending alarm data:", error));
+    }
 
     // Alarm Scheduler Logic
     const alarms = [];
@@ -137,6 +161,9 @@
       
       alarms.push(alarmEntry);
       updateAlarmList();
+
+      // Send the alarm data to the connected Bluetooth device
+      sendAlarmData(alarmEntry);
       
       // Clear input fields for new alarm entry
       document.getElementById('alarmTime').value = '';
