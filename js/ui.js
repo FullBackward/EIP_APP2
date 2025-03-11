@@ -3,26 +3,29 @@ function loadHTMLComponent(targetSelector, url) {
   fetch(url)
     .then(response => response.text())
     .then(html => {
-      document.querySelector(targetSelector).innerHTML = html;
-      // After connectionPage is loaded, bind skip button event
+      const container = document.querySelector(targetSelector);
+      container.innerHTML = ''; 
+      container.innerHTML = html;
+
       if (targetSelector === '#connectionPageContainer') {
-        const skipBtn = document.getElementById('skipButton');
-        skipBtn.addEventListener('click', () => {
-          showSchedulerPage();
-          alert("You skipped Bluetooth connection. Some functions may not work.");
-        });
+        const skipBtn = container.querySelector('#skipButton'); 
+        if (skipBtn) {
+          skipBtn.addEventListener('click', () => {
+            showSchedulerPage();
+            alert("You skipped Bluetooth connection. Some functions may not work.");
+          });
+        }
       }
 
-      // After schedulerPage is loaded, bind temperature jump button event
       if (targetSelector === '#schedulerPageContainer') {
-        const tempBtn = document.getElementById('goToTemperatureBtn');
+        const tempBtn = container.querySelector('#goToTemperatureBtn');
         if (tempBtn) {
           tempBtn.addEventListener('click', showTemperaturePage);
-        } 
+        }
       }
-    // After temperaturePage is loaded, bind back button event
+
       if (targetSelector === '#temperaturePageContainer') {
-        const backBtn = document.getElementById('backToSchedulerBtn');
+        const backBtn = container.querySelector('#backToSchedulerBtn');
         if (backBtn) {
           backBtn.addEventListener('click', backToSchedulerFromTemperaturePage);
         }
@@ -32,39 +35,36 @@ function loadHTMLComponent(targetSelector, url) {
       console.error(`Error loading component from ${url}:`, error);
     });
 }
-  
+
+
 // Page switching function - Scheduler
 function showSchedulerPage() {
   const connectionPage = document.getElementById('connectionPage');
   const schedulerPage = document.getElementById('schedulerPage');
-  if (connectionPage && schedulerPage) {
-      connectionPage.classList.add('hidden');
-      schedulerPage.classList.remove('hidden');
-  }
+  const temperaturePage = document.getElementById('temperaturePage');
+
+  if (connectionPage) connectionPage.classList.add('hidden');
+  if (schedulerPage) schedulerPage.classList.remove('hidden');
+  if (temperaturePage) temperaturePage.classList.add('hidden');
 }
 
-// Page switching function - Temperature 
+// Page switching function - Temperature
 function showTemperaturePage() {
   const schedulerPage = document.getElementById('schedulerPage');
   const temperaturePage = document.getElementById('temperaturePage');
-
-  if (schedulerPage && temperaturePage) {
-    schedulerPage.classList.add('hidden');
-    temperaturePage.classList.remove('hidden');
-  }
+  if (schedulerPage) schedulerPage.classList.add('hidden');
+  if (temperaturePage) temperaturePage.classList.remove('hidden');
 }
 
-// Page switching function - Go back to Temperature page
+// Page switching function - Back
 function backToSchedulerFromTemperaturePage() {
   const schedulerPage = document.getElementById('schedulerPage');
   const temperaturePage = document.getElementById('temperaturePage');
-  if (schedulerPage && temperaturePage) {
-    schedulerPage.classList.remove('hidden');
-    temperaturePage.classList.add('hidden');
-  }
+  if (temperaturePage) temperaturePage.classList.add('hidden');
+  if (schedulerPage) schedulerPage.classList.remove('hidden');
 }
 
-// Initializing page loading component
+// Load pages
 window.addEventListener('DOMContentLoaded', () => {
   loadHTMLComponent('#connectionPageContainer', 'components/connection-page.html');
   loadHTMLComponent('#schedulerPageContainer', 'components/scheduler-page.html');
