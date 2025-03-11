@@ -1,0 +1,23 @@
+<!-- Temperature Control Page -->
+<div id="temperaturePage" class="hidden">
+    <h2>Temperature Control</h2>
+    <p>Set your desired temperature:</p>
+    <form id="temperatureForm" class="form-inline mb-4">
+      <div class="form-group mb-2">
+        <label for="targetTemperature" class="sr-only">Target Temperature</label>
+        <input type="number" id="targetTemperature" class="form-control" placeholder="e.g., 25°C" required>
+      </div>
+      <button type="submit" class="btn btn-success mb-2 ml-2">Set</button>
+    </form>
+  
+    <h3>Current Temperature</h3>
+    <p id="currentTemperature" class="text-info">— °C</p>
+
+    <hr>
+
+    <button id="backToSchedulerBtn" class="btn btn-secondary mt-4">
+        Back to Alarm Scheduler
+    </button>
+
+  </div>
+  
