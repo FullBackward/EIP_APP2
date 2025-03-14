@@ -2,6 +2,7 @@ body {
     background: linear-gradient(135deg, #f8f9fa, #e9ecef);
     min-height: 100vh;
   }
+
   .container {
     max-width: 700px;
     margin-top: 50px;
@@ -10,10 +11,44 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
+
   h2 {
     font-weight: 300;
     margin-bottom: 30px;
   }
+
   .hidden {
     display: none;
+  }
+
+  .logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .logo-img {
+    max-width: 120px;
+    height: auto;
+  }
+
+  .status-panel .badge {
+    font-size: 0.95rem;
+    padding: 6px 10px;
+    border-radius: 0.75rem;
+  }
+  
+  .status-panel .badge-active {
+    background-color: #28a745; /* green */
+    color: white;
+  }
+  .status-panel .badge-inactive {
+    background-color: #6c757d; /* gray */
+    color: white;
+  }
+  .status-panel .badge-cooling {
+    background-color: #007bff; /* blue */
+    color: white;
+  }
+  .status-panel .badge-heating {
+    background-color: #ffc107; /* yellow */
+    color: black;
   }
