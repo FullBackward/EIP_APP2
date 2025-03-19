@@ -27,4 +27,9 @@ body.dark-mode .status-panel {
     background-color: #343A42;
     color: #f0f0f0;
 }
+
+body.dark-mode .app-logo {
+    background-image: url('../assets/logo-dark.jpg') !important;
+}
+
   
