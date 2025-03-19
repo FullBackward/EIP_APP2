@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const logos = document.querySelectorAll('.app-logo');
     logos.forEach(el => {
       el.style.backgroundImage = isDarkMode
-        ? "url('./assets/logo-dark.jpg')"
-        : "url('./assets/logo-light.jpg')";
+        ? "url('/EIP_APP2/assets/logo-dark.jpg')"
+        : "url('/EIP_APP2/assets/logo-light.jpg')";    
     });
 
     // Update data-theme attribute and save
