@@ -1,4 +1,3 @@
-// Loading HTML components dynamically
 function loadHTMLComponent(targetSelector, url) {
   fetch(url)
     .then(response => response.text())
@@ -6,7 +5,6 @@ function loadHTMLComponent(targetSelector, url) {
       const container = document.querySelector(targetSelector);
       container.innerHTML = html;
 
-      // Attach event listeners after loading specific components
       if (targetSelector === '#connectionPageContainer') {
         const skipBtn = container.querySelector('#skipButton');
         if (skipBtn) {
@@ -23,9 +21,8 @@ function loadHTMLComponent(targetSelector, url) {
           tempBtn.addEventListener('click', showTemperaturePage);
         }
 
-        // Call loadStatusPanel AFTER html is injected and container exists
         setTimeout(() => {
-          loadStatusPanel(container); // <<< now container definitely exists
+          loadStatusPanel(container);
         }, 0);
       }
 
@@ -35,60 +32,60 @@ function loadHTMLComponent(targetSelector, url) {
           backBtn.addEventListener('click', backToSchedulerFromTemperaturePage);
         }
 
-        // Same here, ensure DOM exists before loading panel
         setTimeout(() => {
           loadStatusPanel(container);
         }, 0);
       }
-      // const currentTheme = localStorage.getItem("theme") || "light";
-      // if (window.updateLogos) updateLogos(currentTheme);
+
+      if (window.refreshPageView) {
+        window.refreshPageView();
+      }
     })
     .catch(error => {
       console.error(`Error loading component from ${url}:`, error);
     });
 }
 
-
-// Page switching function - Scheduler
 function showSchedulerPage() {
   const connectionPage = document.getElementById('connectionPage');
   const schedulerPage = document.getElementById('schedulerPage');
   const temperaturePage = document.getElementById('temperaturePage');
 
-  if (connectionPage) connectionPage.classList.add('hidden');
-  if (schedulerPage) schedulerPage.classList.remove('hidden');
-  if (temperaturePage) temperaturePage.classList.add('hidden');
+  if (connectionPage)   connectionPage.classList.add('hidden');
+  if (schedulerPage)    schedulerPage.classList.remove('hidden');
+  if (temperaturePage)  temperaturePage.classList.add('hidden');
+
+  if (window.refreshPageView) window.refreshPageView();
 }
 
-// Page switching function - Temperature
 function showTemperaturePage() {
   const schedulerPage = document.getElementById('schedulerPage');
   const temperaturePage = document.getElementById('temperaturePage');
-  if (schedulerPage) schedulerPage.classList.add('hidden');
-  if (temperaturePage) temperaturePage.classList.remove('hidden');
+  if (schedulerPage)    schedulerPage.classList.add('hidden');
+  if (temperaturePage)  temperaturePage.classList.remove('hidden');
+
+  if (window.refreshPageView) window.refreshPageView();
 }
 
-// Page switching function - Back
 function backToSchedulerFromTemperaturePage() {
   const schedulerPage = document.getElementById('schedulerPage');
   const temperaturePage = document.getElementById('temperaturePage');
-  if (temperaturePage) temperaturePage.classList.add('hidden');
-  if (schedulerPage) schedulerPage.classList.remove('hidden');
+  if (temperaturePage)  temperaturePage.classList.add('hidden');
+  if (schedulerPage)    schedulerPage.classList.remove('hidden');
+
+  if (window.refreshPageView) window.refreshPageView();
 }
 
-// Load all main page components on DOM ready
 window.addEventListener('DOMContentLoaded', () => {
   loadHTMLComponent('#connectionPageContainer', 'components/connection-page.html');
   loadHTMLComponent('#schedulerPageContainer', 'components/scheduler-page.html');
   loadHTMLComponent('#temperaturePageContainer', 'components/temperature-page.html');
 });
 
-// Load status panel into existing container
 window.loadStatusPanel = function(containerElement) {
   if (!containerElement) return;
-
   const panelDiv = containerElement.querySelector('#statusPanelContainer');
-  if (!panelDiv) return; // Container not found, skip
+  if (!panelDiv) return; 
 
   fetch('components/status-panel.html')
     .then(response => response.text())
@@ -100,8 +97,6 @@ window.loadStatusPanel = function(containerElement) {
     });
 };
 
-
-// Update status information displayed in panel
 window.updateStatusPanel = function(vibrationStatus, occupancy, controlValue) {
   const vibEl = document.getElementById('statusVibration');
   const occEl = document.getElementById('statusOccupancy');
@@ -118,4 +113,3 @@ window.updateStatusPanel = function(vibrationStatus, occupancy, controlValue) {
 
   if (controlEl) controlEl.textContent = controlText;
 };
-

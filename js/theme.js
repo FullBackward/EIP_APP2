@@ -1,24 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
   const toggleBtn = document.getElementById("toggleThemeBtn");
 
+  function refreshPageView() {
+    // e.g. updateStatusPanel();
+  }
+
   function applyTheme(isDarkMode) {
     document.body.classList.toggle('dark-mode', isDarkMode);
-
-    // Unified logo update
-    const logos = document.querySelectorAll('.app-logo');
-    logos.forEach(el => {
-      el.style.backgroundImage = isDarkMode
-        ? "url('/EIP_APP2/assets/logo-dark.jpg')"
-        : "url('/EIP_APP2/assets/logo-light.jpg')";    
-    });
-
-    // Update data-theme attribute and save
     document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    refreshPageView();
   }
 
   const savedTheme = localStorage.getItem("theme") || "light";
-  const isDarkMode = savedTheme === "dark";
+  const isDarkMode = (savedTheme === "dark");
 
   if (isDarkMode) {
     document.body.classList.add("dark-mode");
@@ -32,10 +27,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
-      const isDark = document.body.classList.contains("dark-mode");
-      applyTheme(!isDark);
+      const currentlyDark = document.body.classList.contains("dark-mode");
+      applyTheme(!currentlyDark);
     });
   }
 
+  refreshPageView();
+
   window.applyTheme = applyTheme;
+  window.refreshPageView = refreshPageView;
 });

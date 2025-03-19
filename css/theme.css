@@ -32,6 +32,10 @@ body.dark-mode .app-logo {
     background-image: url('../assets/logo-dark.jpg') !important;
 }
 
+body:not(.dark-mode) .app-logo {
+    background-image: url('../assets/logo-light.jpg') !important;
+}
+
 body.dark-mode .status-panel h5,
 body.dark-mode .status-panel ul,
 body.dark-mode .status-panel li,
