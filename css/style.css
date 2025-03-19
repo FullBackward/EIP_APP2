@@ -53,6 +53,11 @@ body {
     color: black;
   }
 
+  .panel-light {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
   .app-logo {
     display: inline-block;  
     width: 100px !important;

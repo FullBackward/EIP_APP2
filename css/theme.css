@@ -32,4 +32,17 @@ body.dark-mode .app-logo {
     background-image: url('../assets/logo-dark.jpg') !important;
 }
 
+body.dark-mode .status-panel h5,
+body.dark-mode .status-panel ul,
+body.dark-mode .status-panel li,
+body.dark-mode .status-panel strong,
+body.dark-mode .status-panel span {
+    color: #f0f0f0 !important;
+}
+
+body.dark-mode .panel-light {
+    background-color: #3E444C !important;
+    color: #f0f0f0 !important;
+}
+
   
