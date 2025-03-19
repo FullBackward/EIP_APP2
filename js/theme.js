@@ -17,9 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const isDark = document.body.classList.contains("dark-mode");
       const logos = document.querySelectorAll(".app-logo");
       logos.forEach(logo => {
-        logo.style.backgroundImage = isDark
-          ? "url('../assets/logo-dark.jpg')"
-          : "url('../assets/logo-light.jpg')";
+        const logoPath = isDark
+          ? `${window.location.origin}/assets/logo-dark.jpg`
+          : `${window.location.origin}/assets/logo-light.jpg`;
+        logo.style.backgroundImage = `url('${logoPath}')`;
       });
     }
   
