@@ -38,14 +38,11 @@ function initSchedulerControls() {
       alarmTime.setDate(alarmTime.getDate() + 1);
     }
     
-    // Add random motor selection
-    const motorId = Math.floor(Math.random() * 3); // 0, 1, or 2
     
     // Create an alarm object that matches our console's protocol
     const alarmEntry = {
       time: alarmTime.toISOString(),
       label: labelValue,
-      motor_id: motorId,
       duration: 60, // Default duration in seconds
       intensity: 100, // Default intensity percentage
       // Legacy properties for backward compatibility
@@ -58,7 +55,7 @@ function initSchedulerControls() {
     updateAlarmList();
     
     // Send the alarm data to the connected Bluetooth device
-    sendAlarmData(alarms);
+    //sendAlarmData(alarms);
     
     // Clear input fields for new alarm entry
     if (alarmTimeInput) alarmTimeInput.value = '';
@@ -106,7 +103,7 @@ function updateAlarmList() {
     const alarmInfo = document.createElement('div');
     alarmInfo.innerHTML = `
       <div><strong>${alarm.label}</strong> at ${timeString} on ${dateString}</div>
-      <div class="text-muted small">Motor ${alarm.motor_id + 1}, ${alarm.duration}s, ${alarm.intensity}% intensity</div>
+      <div class="text-muted small">Duration ${alarm.duration}s, ${alarm.intensity}% intensity</div>
     `;
     
     const deleteButton = document.createElement('button');
